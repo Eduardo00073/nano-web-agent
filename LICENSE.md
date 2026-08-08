@@ -1,19 +1,44 @@
-# Licença Acadêmica e Restrição Comercial (Eduardo00073)
+# Licença de Uso Acadêmico, Pessoal e Restrição Comercial
 
-Copyright (c) 2026 Eduardo Junior Alcântara da Silva. Todos os direitos reservados.
+**Copyright (c) 2026 Eduardo Junior Alcântara da Silva. Todos os direitos reservados.**
 
-## Uso Pessoal e Acadêmico
-O uso deste software é **totalmente gratuito e livre** para fins pessoais, educacionais e acadêmicos. Você pode modificar, distribuir e utilizar o código para estudos, desde que:
-1. **Atribuição:** Você deve incluir o nome do autor original (Eduardo Junior Alcântara da Silva) e um link para o meu perfil (Eduardo00073) em qualquer cópia ou versão modificada do software.
-2. Não haja monetização ou vantagem comercial direta.
+---
 
-## Restrição de Uso Comercial
-É **estritamente proibido** utilizar este software, suas modificações ou partes dele para fins comerciais (venda de produtos, SaaS, serviços cobrados ou qualquer método de geração de lucro) sem autorização prévia por escrito.
+### 📜 1. Concessão de Licença para Uso Pessoal e Acadêmico
+É concedida permissão, gratuitamente, a qualquer pessoa que obtenha uma cópia deste software e dos arquivos de documentação associados, para utilizar, estudar, copiar, modificar e distribuir o código exclusivamente para:
+- **Fins Acadêmicos, Educacionais e de Pesquisa Científica.**
+- **Fins Pessoais de Aprendizado e Estudos Individuais.**
+- **Projetos Open-Source Sem Fins Lucrativos.**
 
-Caso deseje utilizar este sistema com fins comerciais, o usuário deve entrar em contato com o autor original para negociar os termos de licenciamento ou pagamento de comissões (Royalties).
+#### ⚠️ Condição Obrigatória de Atribuição (Créditos):
+Em qualquer cópia, redistribuição ou trabalho derivado deste software, **É OBRIGATÓRIO** manter de forma visível e explícita:
+1. O nome completo do autor original: **Eduardo Junior Alcântara da Silva**.
+2. O link para o perfil do autor no GitHub: [github.com/Eduardo00073](https://github.com/Eduardo00073).
+3. O link para o site oficial do desenvolvedor: [prof-eduardo.com](https://www.prof-eduardo.com/).
 
-**Contato para licenciamento:** 
-- [LinkedIn: Eduardo Junior](https://www.linkedin.com/in/edu7/)
-- [Website: prof-eduardo.com](https://www.prof-eduardo.com/)
+---
 
-**O SOFWARE É FORNECIDO "NO ESTADO EM QUE SE ENCONTRA", SEM QUALQUER GARANTIA EXPRESSA OU IMPLÍCITA.**
+### 🚫 2. Restrição Estrita de Uso Comercial
+**É EXPRESSAMENTE PROIBIDA** a utilização deste software, suas partes, modificações ou derivados para qualquer finalidade comercial, incluindo, mas não se limitando a:
+- Venda direta de licenças do sistema ou de partes do código-fonte.
+- Oferta do software como serviço pago (SaaS / Software as a Service).
+- Utilização em empresas ou produtos pagos sem contrato formal prévio.
+- Empacotamento do sistema em soluções comerciais de terceiros.
+
+---
+
+### 🤝 3. Licenciamento Comercial e Parcerias
+Caso deseje utilizar este software para fins comerciais, implementação corporativa ou revenda, o interessado **DEVE** entrar em contato previamente com o autor para:
+- Adquirir uma **Licença Comercial Proprietária**.
+- Acordar o pagamento de **Royalties ou Comissões de Licenciamento**.
+- Solicitar customizações ou suporte técnico oficial.
+
+**Contatos do Desenvolvedor:**
+- 📧 **Website:** [www.prof-eduardo.com](https://www.prof-eduardo.com/)
+- 💼 **LinkedIn:** [linkedin.com/in/edu7](https://www.linkedin.com/in/edu7/)
+- 🐙 **GitHub:** [github.com/Eduardo00073](https://github.com/Eduardo00073)
+
+---
+
+### ⚖️ 4. Isenção de Garantia
+O SOFTWARE É FORNECIDO "NO ESTADO EM QUE SE ENCONTRA", SEM GARANTIA DE QUALQUER TIPO, EXPRESSA OU IMPLÍCITA, INCLUINDO, MAS NÃO SE LIMITANDO ÀS GARANTIAS DE COMERCIABILIDADE, ADEQUAÇÃO A UM FIM ESPECÍFICO E NÃO VIOLAÇÃO. EM NENHUM CASO OS AUTORES OU DIREITORES SERÃO RESPONSÁVEIS POR QUALQUER RECLAMAÇÃO, DANOS OU OUTRA RESPONSABILIDADE, SEJA EM UMA AÇÃO DE CONTRATO, DELITO OU OUTRA FORMA, DECORRENTE DE OU EM CONEXÃO COM O SOFTWARE OU O USO OU OUTRAS NEGOCIAÇÕES NO SOFTWARE.

@@ -1,112 +1,168 @@
 <div align="center">
-  <h1>🤖 Nano Web Agent — Automação Web & Agente de IA para Navegadores</h1>
-  <p><b>Agente Autônomo e Inteligente que navega, preenche formulários, inspeciona DOM e executa tarefas no seu browser via Google Gemini ou LLMs Locais (Ollama).</b></p>
+  <h1>🤖 Nano Web Agent — AI Browser Automation Engine</h1>
+  <p><b>Agente Autônomo para Navegadores Web baseado em LLMs (Google Gemini API & Ollama Local AI)</b></p>
 
   <p align="center">
-    <img src="https://img.shields.io/badge/Chrome_Extension-Manifest_V3-4285F4?style=for-the-badge&logo=google-chrome" alt="Chrome Extension"/>
-    <img src="https://img.shields.io/badge/LLM-Google_Gemini-8E75B2?style=for-the-badge&logo=google" alt="Gemini"/>
+    <img src="https://img.shields.io/badge/Chrome_Extension-Manifest_V3-4285F4?style=for-the-badge&logo=google-chrome" alt="Manifest V3"/>
+    <img src="https://img.shields.io/badge/LLM-Google_Gemini_Pro-8E75B2?style=for-the-badge&logo=google" alt="Gemini"/>
     <img src="https://img.shields.io/badge/Local_AI-Ollama-000000?style=for-the-badge&logo=ollama" alt="Ollama"/>
-    <img src="https://img.shields.io/badge/Licença-Proprietária%20%2F%20Comercial-red?style=for-the-badge&logo=shield" alt="Licença"/>
+    <img src="https://img.shields.io/badge/Engine-Chrome_Debugger_Protocol-FF6C37?style=for-the-badge" alt="CDP"/>
+    <img src="https://img.shields.io/badge/Licença-Acadêmica%20%2F%20Comercial-red?style=for-the-badge&logo=shield" alt="Licença"/>
   </p>
 </div>
 
 ---
 
 > [!CAUTION]
-> **TERMOS DE LICENCIAMENTO & RESTRICAO COMERCIAL**
+> **TERMOS DE LICENCIAMENTO E USO COMERCIAL**
 > 
-> O **Nano Web Agent** é um software de automação avançado desenvolvido por **Eduardo Junior Alcântara da Silva**.
+> O **Nano Web Agent** é um software de automação avançado e proprietário desenvolvido por **Eduardo Junior Alcântara da Silva**.
 > - 🎓 **Uso Pessoal & Acadêmico:** 100% Gratuito, exigindo a devida **atribuição de autoria** e link para este repositório.
 > - 💼 **Uso Comercial & Lucrativo:** **Estritamente proibido** utilizar este código em soluções pagas, SaaS ou serviços comerciais sem autorização prévia por escrito e pagamento de comissões/royalties. Leia o arquivo [`LICENSE.md`](file:///LICENSE.md).
 
 ---
 
-## 📌 Visão Geral
+## 📌 Visão Geral do Sistema
 
-Inspirado em soluções pioneiras de *Computer Use* (como o Claude Computer Use da Anthropic), o **Nano Web Agent** é uma extensão potente que transforma modelos de linguagem em **agentes autônomos que operam a Web**. 
+Inspirado nos avanços de agentes autônomos para sistemas operacionais e navegadores (como o *Claude Computer Use*), o **Nano Web Agent** é uma extensão de navegação de nível profissional que transforma Modelos de Linguagem (LLMs) em **operadores de navegador ativos**.
 
-Ele permite que você delegue tarefas repetitivas, maçantes ou complexas diretamente no navegador:
-- 📝 Preenchimento automático de formulários e cadastros com base em dados brutos.
-- 🔍 Inspeção dinâmica da árvore de acessibilidade e estruturas de dados do DOM.
-- ⚡ Execução de ações reais no navegador (cliques, inputs de texto, rolagem, seleção de opções).
-- 🤖 Suporte a **LLMs Locais (Ollama)** para rodar 100% offline e sem custos de API, ou **Google Gemini API** para máxima capacidade analítica.
+Diferente de simples chatbots que apenas respondem texto, o **Nano Web Agent** possui "olhos e mãos" dentro do navegador:
+1. **Ele enxerga:** Converte a página web ativa em uma árvore de acessibilidade simplificada (Accessibility Tree / DOM Tree).
+2. **Ele pensa:** Envia o estado atual da tela + a meta do usuário para o LLM (Gemini ou Ollama) e recebe chamadas de ferramentas de volta (Tool Calls).
+3. **Ele age:** Injeta ações reais de teclado, cliques de mouse, seleção de formulários e rolagem diretamente na aba do navegador.
+4. **Ele avalia:** Observa a reação da página pós-ação e continua o loop até cumprir o objetivo.
 
 ---
 
-## 🏗️ Arquitetura do Sistema
+## 🏗️ Arquitetura Interna & Ciclo do Agente Autônomo
 
-O sistema é construído sobre a arquitetura de **Manifest V3** com comunicação assíncrona baseada em eventos entre a interface do usuário, o background script e os scripts de conteúdo injetados na página ativa.
+O sistema foi desenhado para ser resiliente, assíncrono e agnóstico a provedores de IA.
 
 ```mermaid
 graph TD
-    User["👤 Usuário / Side Panel"] -->|Injeta Instrução| Popup["🎛️ Sidepanel UI / Settings"]
-    Popup -->|Message Passing| BG["⚙️ Background Service Worker"]
-    
-    subgraph "Engine de Decisão (LLM Provider)"
-        BG -->|Prompt + Contexto DOM| Gemini["🌐 Google Gemini API"]
-        BG -->|Prompt + Contexto DOM| Ollama["🏠 Ollama (Llama3/Gemma Local)"]
+    subgraph "Interface do Usuário (Sidepanel / Popup)"
+        UserPrompt["🗣️ Prompt do Usuário (ex: 'Preencha o formulário com dados do CSV')"]
     end
-    
-    Gemini -->|Resposta JSON (Tool Calls)| BG
-    Ollama -->|Resposta JSON (Tool Calls)| BG
-    
-    BG -->|Injeta Ação| CS["📜 Content Script (DOM Manipulator)"]
-    CS -->|Clique / Digitacao / Scroll| Page["🌐 Página Web Ativa"]
-    Page -->|Novo Estado do DOM| CS
-    CS -->|Árvore de Acessibilidade| BG
+
+    subgraph "Core Agent Loop (background/agent.js)"
+        UserPrompt --> AgentInit["🎬 Início da Sessão de Automação"]
+        AgentInit --> CaptureDOM["👁️ Captura da Árvore do DOM (content/accessibility-tree.js)"]
+        CaptureDOM --> BuildContext["📦 Montagem do Contexto (System Prompt + DOM Snapshot)"]
+        BuildContext --> LLMRouter{"🔀 Router de Modelo (Settings)"}
+    end
+
+    subgraph "Provedores de Inteligência (LLM Engine)"
+        LLMRouter -- "Modo Nuvem" --> GeminiAPI["🌐 Google Gemini API (background/gemini-api.js)"]
+        LLMRouter -- "Modo Local" --> OllamaAPI["🏠 Ollama Local Server (background/ollama-api.js)"]
+    end
+
+    subgraph "Execução de Ferramentas no Navegador (Tool Execution)"
+        GeminiAPI -->|Retorna Tool Call JSON| Decision["🧠 Decisor de Ações"]
+        OllamaAPI -->|Retorna Tool Call JSON| Decision
+        
+        Decision --> ActionClick{"Ação Solicitada?"}
+        ActionClick -- "click(elementId)" --> ExecClick["🖱️ Clique no Elemento"]
+        ActionClick -- "type(elementId, text)" --> ExecType["⌨️ Digitação de Texto"]
+        ActionClick -- "scroll(direction)" --> ExecScroll["📜 Rolagem de Tela"]
+        ActionClick -- "finish(reason)" --> ExecFinish["🏁 Conclusão da Tarefa"]
+        
+        ExecClick --> PageUpdate["🌐 Atualização do Estado da Página Web"]
+        ExecType --> PageUpdate
+        ExecScroll --> PageUpdate
+        PageUpdate --> CaptureDOM
+    end
 ```
 
 ---
 
-## 🌟 Principais Funcionalidades
+## 🌟 Funcionalidades e Diferenciais Técnicos
 
-### 1. 🔀 Suporte Híbrido Multi-LLM (Cloud + Local)
-- **Nuvem (Google Gemini):** Utilize a chave da API do Gemini (Flash ou Pro) para resolução rápida e raciocínio multimodal complexo.
-- **Local (Ollama):** Conecte a extensão ao seu endpoint local do Ollama (`http://localhost:11434`) para executar modelos como **Llama 3, Gemma ou Mistral** sem enviar dados para a nuvem.
+### 1. 🔀 Provedor Multi-LLM (Cloud Gemini & Ollama Local)
+- **Google Gemini API:** Integração direta com a API do Gemini Flash/Pro para raciocínio complexo.
+- **Ollama Local AI:** Permite conectar modelos locais (como **Llama 3, Gemma, Mistral, Qwen**) rodando na porta `http://localhost:11434`. Inclui regras automáticas de bypass de CORS (`rules/ollama-cors.json`) no Chrome.
 
-### 2. 👁️ Análise Inteligente de DOM (Accessibility Tree)
-Em vez de enviar screenshots pesadas a todo momento, a extensão extrai uma representação enxuta e semântica do DOM (árvore de acessibilidade), identificando IDs, botões interativos e campos de formulário, resultando em menor consumo de tokens e maior precisão.
+### 2. 👁️ Extração Eficiente da Árvore de Acessibilidade (`content/accessibility-tree.js`)
+Em vez de gastar milhares de tokens enviando capturas de tela gigantescas em imagem (Vision), a extensão extrai uma árvore de acessibilidade enxuta em JSON contendo apenas elementos interativos (`button`, `input`, `a`, `select`, `textarea`), atribuindo IDs numéricos temporários (`[12]`, `[15]`). Isso garante:
+- Respostas até **10x mais rápidas**.
+- Redução brutal no consumo de tokens da API.
+- Funcionamento perfeito em máquinas com hardware modesto usando Ollama.
 
-### 3. 🕹️ Motor de Ações Autônomas
-O agente é capaz de interpretar ordens em linguagem natural e traduzi-las em ações ordenadas:
-- `click(selector)`: Clica em elementos visíveis.
-- `type(selector, text)`: Preenche inputs e textareas.
-- `scroll(direction)`: Rola a página para revelar novos elementos.
-- `wait(ms)`: Aguarda carregamentos assíncronos (AJAX/Fetch).
+### 3. 🕹️ Conjunto de Ferramentas de Automação (`background/browser-tools.js`)
+O agente possui as seguintes ferramentas declaradas nativamente para a IA:
+- `click_element(id)`: Executa o evento de clique no elemento selecionado.
+- `type_text(id, text)`: Foca e digita o texto especificado.
+- `scroll_page(direction)`: Rola a página para cima (`up`) ou para baixo (`down`).
+- `wait_for(ms)`: Aguarda carregamentos dinâmicos ou elementos AJAX.
+- `finish_task(summary)`: Encerra o loop e apresenta o relatório final ao usuário.
+
+### 4. 🎨 Indicador Visual de Agente Ativo (`content/agent-indicator.js`)
+Durante a execução autônoma, uma barra de status discreta é injetada no topo da página informando ao usuário qual ação o agente está realizando em tempo real (ex: `"Agente digitando no campo [14]..."`), permitindo interrupção manual a qualquer segundo.
 
 ---
 
-## 📦 Como Instalar no Navegador (Developer Mode)
+## 📂 Estrutura de Código-Fonte do Repositório
 
-1. Clone ou baixe este repositório:
+```
+nano-web-agent/
+├── src/                          # Código-fonte da Extensão Chrome (Manifest V3)
+│   ├── background/               # Service Worker e Motor do Agente
+│   │   ├── agent.js              # Loop principal de controle (Perceber -> Planejar -> Agir)
+│   │   ├── browser-tools.js      # Declaração e execução das ferramentas de automação
+│   │   ├── debugger.js           # Integração com Chrome Debugger Protocol (CDP)
+│   │   ├── gemini-api.js         # Cliente da API do Google Gemini (Nuvem)
+│   │   ├── ollama-api.js         # Cliente HTTP para servidor local Ollama
+│   │   └── settings.js           # Gerenciador de armazenamento local da extensão
+│   ├── content/                  # Scripts injetados nas abas abertas
+│   │   ├── accessibility-tree.js # Parser de DOM e construtor da árvore de acessibilidade
+│   │   └── agent-indicator.js    # Overlay visual de status do agente
+│   ├── icons/                    # Ícones oficiais da extensão
+│   ├── rules/                    # Regras DeclarativeNetRequest
+│   │   └── ollama-cors.json      # Regra de desvio de CORS para Ollama Local
+│   ├── background.js             # Entrypoint do Service Worker
+│   ├── manifest.json             # Manifesto V3 com permissões e scripts
+│   ├── popup.html / popup.js     # Interface rápida de acionamento
+│   ├── settings.html / .js       # Painel de configurações (API Keys, Endpoints, System Prompts)
+│   └── sidepanel.html / .js      # Interface gráfica lateral para chat e comando do agente
+├── LICENSE.md                    # Termos de Licença de Uso
+└── README.md                     # Esta documentação detalhada
+```
+
+---
+
+## 🛠️ Como Instalar e Executar
+
+1. **Clonar este repositório:**
    ```bash
    git clone https://github.com/Eduardo00073/nano-web-agent.git
    ```
-2. Abra o seu navegador baseado em Chromium (Google Chrome, Microsoft Edge, Brave).
-3. Acesse a página de extensões: `chrome://extensions/`
-4. Ative o **Modo do desenvolvedor** no canto superior direito.
-5. Clique em **Carregar sem compactação** (Load unpacked) e selecione a pasta `src/` dentro do repositório.
-6. A extensão será carregada e o ícone ficará disponível na sua barra de ferramentas!
+
+2. **Carregar no Navegador (Chrome / Edge / Brave):**
+   - Acesse a página `chrome://extensions/`
+   - Ative a opção **Modo do Desenvolvedor** no canto superior direito.
+   - Clique no botão **Carregar sem compactação** (Load unpacked).
+   - Selecione a pasta `src/` localizada dentro do repositório clonado.
+
+3. **Configurar o Provedor de IA:**
+   - Clique no ícone da extensão e abra as **Configurações**.
+   - **Para Google Gemini:** Insira sua API Key obtida no [Google AI Studio](https://aistudio.google.com/).
+   - **Para Ollama Local:** Instale o [Ollama](https://ollama.com/), rode um modelo no terminal (`ollama run llama3`) e mantenha a URL `http://localhost:11434`.
+
+4. **Operar o Agente:**
+   - Abra qualquer site (ex: um formulário ou painel de dados).
+   - Abra o **Sidepanel** da extensão no canto lateral do navegador.
+   - Digite a instrução desejada (ex: *"Preencha o formulário com dados de exemplo e clique em Enviar"*) e assista a automação em tempo real!
 
 ---
 
-## ⚙️ Configuração Inicial
+## 📄 Licenciamento e Contato Comercial
 
-1. Clique no ícone da extensão para abrir as **Configurações**.
-2. Selecione o seu provedor de IA preferido:
-   - **Google Gemini:** Insira sua API Key obtida no Google AI Studio.
-   - **Ollama Local:** Certifique-se de que o Ollama está rodando e configure a URL base (`http://localhost:11434`).
-3. Abra o **Side Panel** no navegador e comece a enviar comandos!
+Este projeto está protegido por **Licença de Atribuição Pessoal/Acadêmica com Restrição Comercial**:
+- **Permitido:** Estudos, pesquisas acadêmicas e projetos pessoais não monetizados.
+- **Proibido:** Revenda, comercialização em SaaS ou uso em sistemas corporativos com intuito lucrativo sem licença comercial autorizada.
 
----
-
-## 💼 Licenciamento e Contato Comercial
-
-Para licenciar este software para uso corporativo, integração em produtos SaaS ou consultoria:
-
-- **Desenvolvedor:** Eduardo Junior Alcântara da Silva
+Para propostas comerciais ou customização sob medida:
+- 📧 **Website:** [www.prof-eduardo.com](https://www.prof-eduardo.com/)
 - 💼 **LinkedIn:** [linkedin.com/in/edu7](https://www.linkedin.com/in/edu7/)
-- 🌐 **Website:** [www.prof-eduardo.com](https://www.prof-eduardo.com/)
 
 ---
 
