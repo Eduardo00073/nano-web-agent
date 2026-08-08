@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Delta Agent</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      width: 260px;
+      background: #ffffff;
+      color: #1e293b;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      padding: 20px 18px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header img {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.15);
+    }
+    .header-text h1 { font-size: 16px; font-weight: 700; color: #fff; }
+    .header-text p  { font-size: 11px; color: rgba(255,255,255,0.75); margin-top: 1px; }
+
+    .body { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+
+    .btn {
+      display: flex; align-items: center; gap: 10px;
+      width: 100%; padding: 11px 14px;
+      border-radius: 10px; border: none;
+      font: inherit; font-size: 13px; font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79,70,229,0.4); }
+
+    .btn-secondary {
+      background: #f8fafc;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+    .btn-secondary:hover { background: #f1f5f9; color: #1e293b; }
+
+    .btn svg { flex-shrink: 0; opacity: 0.85; }
+
+    .divider {
+      height: 1px; background: #f1f5f9; margin: 2px 0;
+    }
+
+    .footer {
+      padding: 10px 14px;
+      border-top: 1px solid #f1f5f9;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .status-dot {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; color: #64748b;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
+    .version { font-size: 10px; color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <img src="icons/icon-128.png" alt="Delta Agent"/>
+    <div class="header-text">
+      <h1>Delta Agent</h1>
+      <p>Agente autônomo de navegação com IA</p>
+    </div>
+  </div>
+
+  <div class="body">
+    <button class="btn btn-primary" id="open-panel">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="3"/>
+        <path d="M9 3v18"/>
+      </svg>
+      Abrir Painel
+    </button>
+
+    <div class="divider"></div>
+
+    <button class="btn btn-secondary" id="open-settings">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07-1.41 1.41M8.34 15.66l-1.41 1.41M19.07 19.07l-1.41-1.41M8.34 8.34 6.93 6.93"/>
+      </svg>
+      Configurações
+    </button>
+  </div>
+
+  <div class="footer">
+    <div class="status-dot">
+      <span class="dot"></span>
+      Pronto
+    </div>
+    <span class="version">v2.0</span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

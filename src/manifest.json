@@ -1,0 +1,82 @@
+{
+  "manifest_version": 3,
+  "name": "Delta Agent",
+  "version": "2.0.0",
+  "description": "Autonomous web browsing agent powered by AI APIs",
+  "minimum_chrome_version": "116",
+  "icons": {
+    "128": "icons/icon-128.png",
+    "48":  "icons/icon-48.png",
+    "16":  "icons/icon-16.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Delta Agent",
+    "default_popup": "popup.html"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "options_page": "settings.html",
+  "permissions": [
+    "sidePanel",
+    "storage",
+    "activeTab",
+    "scripting",
+    "debugger",
+    "tabs",
+    "webNavigation",
+    "notifications",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "js": ["content/accessibility-tree.js"],
+      "matches": ["<all_urls>"],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "js": ["content/agent-indicator.js"],
+      "matches": ["<all_urls>"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "matches": ["<all_urls>"],
+      "resources": [
+        "content/accessibility-tree.js",
+        "content/agent-indicator.js"
+      ]
+    }
+  ],
+  "commands": {
+    "toggle-side-panel": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+G",
+        "mac": "Command+Shift+G"
+      },
+      "description": "Abrir/Fechar painel do Agente Delta"
+    }
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ollama-cors",
+        "enabled": true,
+        "path": "rules/ollama-cors.json"
+      }
+    ]
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://generativelanguage.googleapis.com http://localhost:11434 http://127.0.0.1:11434; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:;"
+  }
+}

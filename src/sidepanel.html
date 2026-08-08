@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Delta Agent</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand:    #4f46e5;
+      --brand2:   #7c3aed;
+      --bg:       #f8fafc;
+      --white:    #ffffff;
+      --border:   #e2e8f0;
+      --text:     #1e293b;
+      --muted:    #64748b;
+      --light:    #f1f5f9;
+      --success:  #059669;
+      --error:    #dc2626;
+      --radius:   14px;
+    }
+
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .logo-wrap {
+      width: 32px; height: 32px; flex-shrink: 0;
+    }
+    .logo-wrap img { width: 100%; height: 100%; border-radius: 8px; }
+    header h1 { font-size: 14px; font-weight: 700; flex: 1; color: var(--text); }
+    .hdr-actions { display: flex; gap: 4px; }
+    .icon-btn {
+      background: none; border: none; cursor: pointer;
+      padding: 6px; border-radius: 8px; color: var(--muted);
+      transition: background 0.15s, color 0.15s;
+      display: flex; align-items: center;
+    }
+    .icon-btn:hover { background: var(--light); color: var(--text); }
+
+    /* ── Status bar ── */
+    #status-bar {
+      padding: 5px 14px;
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 6px;
+      flex-shrink: 0;
+      min-height: 28px;
+    }
+    #status-bar.running { color: var(--brand); }
+    #status-bar.error   { color: var(--error); }
+    .spinner {
+      width: 11px; height: 11px;
+      border: 1.5px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Messages ── */
+    #messages {
+      flex: 1; overflow-y: auto;
+      padding: 16px 14px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    #messages:empty::after {
+      content: 'Descreva uma tarefa e o Delta Agent irá executá-la de forma autônoma.';
+      color: var(--muted); font-size: 13px;
+      text-align: center; margin: auto;
+      line-height: 1.6; max-width: 200px;
+    }
+
+    /* User bubble */
+    .msg-user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 18px 18px 4px 18px;
+      max-width: 85%;
+      font-size: 13px; line-height: 1.5;
+      word-break: break-word;
+      box-shadow: 0 2px 8px rgba(79,70,229,0.2);
+    }
+
+    /* Agent bubble */
+    .msg-agent {
+      align-self: flex-start;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px 18px 18px 18px;
+      padding: 10px 14px;
+      max-width: 92%;
+      font-size: 13px; line-height: 1.6;
+      word-break: break-word;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    /* Tool call */
+    .msg-action {
+      align-self: flex-start;
+      background: #f0f0ff;
+      border: 1px solid #d0d0ff;
+      border-left: 3px solid var(--brand);
+      border-radius: 0 8px 8px 0;
+      padding: 7px 11px;
+      max-width: 92%;
+      font-size: 11.5px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: #3730a3;
+    }
+    .msg-action .tool-name { font-weight: 600; }
+    .msg-action .tool-args { color: var(--muted); margin-top: 2px; font-size: 11px; }
+
+    /* Error */
+    .msg-error {
+      align-self: flex-start;
+      background: #fff5f5;
+      border: 1px solid #fecaca;
+      border-left: 3px solid var(--error);
+      border-radius: 0 8px 8px 0;
+      padding: 7px 11px;
+      max-width: 92%;
+      font-size: 12px;
+      color: #991b1b;
+    }
+
+    /* Screenshot */
+    .msg-screenshot { align-self: flex-start; max-width: 100%; }
+    .msg-screenshot img {
+      max-width: 100%; border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: zoom-in;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: box-shadow 0.15s;
+    }
+    .msg-screenshot img:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+
+    /* Status message inline */
+    .msg-status {
+      align-self: center;
+      font-size: 11px; color: var(--muted);
+      background: var(--light);
+      border-radius: 20px;
+      padding: 4px 12px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── Input area ── */
+    #input-area {
+      padding: 10px 12px 14px;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .input-box {
+      display: flex; align-items: flex-end; gap: 8px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 8px 8px 8px 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-box:focus-within {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(79,70,229,0.08);
+    }
+    #prompt-input {
+      flex: 1; background: none; border: none; outline: none;
+      font: inherit; color: var(--text);
+      resize: none; max-height: 110px; min-height: 22px;
+      line-height: 1.5;
+    }
+    #prompt-input::placeholder { color: var(--muted); }
+
+    #send-btn {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      color: #fff; border: none; border-radius: 10px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.15s, transform 0.15s;
+      box-shadow: 0 2px 6px rgba(79,70,229,0.35);
+    }
+    #send-btn:hover:not(:disabled) { transform: scale(1.05); }
+    #send-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+    #stop-btn {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: #fee2e2; color: var(--error);
+      border: 1.5px solid #fecaca; border-radius: 10px;
+      cursor: pointer; display: none; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    #stop-btn:hover { background: #fecaca; }
+    #stop-btn.visible { display: flex; }
+
+    .input-hint {
+      font-size: 10px; color: #94a3b8;
+      text-align: center; margin-top: 6px;
+    }
+
+    /* ── Scrollbar ── */
+    #messages::-webkit-scrollbar { width: 4px; }
+    #messages::-webkit-scrollbar-track { background: transparent; }
+    #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    #messages::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-wrap"><img src="icons/icon-128.png" alt="Delta Agent"/></div>
+    <h1>Delta Agent</h1>
+    <div class="hdr-actions">
+      <button class="icon-btn" id="clear-btn" title="Limpar conversa">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6m4-6v6"/><path d="M9 6V4h6v2"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="settings-btn" title="Configurações">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07-1.41 1.41M8.34 15.66l-1.41 1.41M19.07 19.07l-1.41-1.41M8.34 8.34 6.93 6.93"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="status-bar">
+    <span id="status-text">Pronto</span>
+  </div>
+
+  <div id="messages"></div>
+
+  <div id="input-area">
+    <div class="input-box">
+      <textarea id="prompt-input" placeholder="O que devo fazer por você?" rows="1"></textarea>
+      <button id="stop-btn" title="Parar agente">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="6" width="12" height="12" rx="2"/>
+        </svg>
+      </button>
+      <button id="send-btn" title="Enviar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+    <div class="input-hint">Enter para enviar · Shift+Enter para nova linha</div>
+  </div>
+
+  <script src="sidepanel.js" type="module"></script>
+</body>
+</html>

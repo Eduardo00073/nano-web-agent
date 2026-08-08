@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [
+        {
+          "header": "origin",
+          "operation": "set",
+          "value": "http://localhost"
+        }
+      ]
+    },
+    "condition": {
+      "urlFilter": "||localhost:11434/",
+      "resourceTypes": ["xmlhttprequest", "other"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [
+        {
+          "header": "origin",
+          "operation": "set",
+          "value": "http://localhost"
+        }
+      ]
+    },
+    "condition": {
+      "urlFilter": "||127.0.0.1:11434/",
+      "resourceTypes": ["xmlhttprequest", "other"]
+    }
+  }
+]
