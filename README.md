@@ -166,6 +166,22 @@ Para propostas comerciais ou customização sob medida:
 
 ---
 
+## ⭐ Gostou do projeto?
+
+Se este projeto te ajudou ou despertou seu interesse, deixe uma **estrela** — isso ajuda outros desenvolvedores a encontrarem o repositório e me motiva a continuar evoluindo.
+
+### 🔗 Outros projetos relacionados
+
+🧩 [Gemini Sidebar Assistant](https://github.com/Eduardo00073/gemini-sidebar-assistant) — extensão de produtividade com IA no painel lateral do navegador.
+
+🐙 [Git Essentials](https://github.com/Eduardo00073/git-essentials) — guia completo de Git e GitHub, do básico ao avançado.
+
+### 🤝 Quer contribuir?
+
+Dê uma olhada no [CONTRIBUTING.md](CONTRIBUTING.md) e nas issues marcadas como `good first issue`. Toda contribuição é bem-vinda — desde relatar um bug até sugerir uma nova ferramenta pro agente.
+
+---
+
 <div align="center">
   <p>© 2026 Eduardo Junior Alcântara da Silva. Todos os direitos reservados.</p>
 </div>
